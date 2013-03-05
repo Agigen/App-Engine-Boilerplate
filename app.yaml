@@ -1,0 +1,71 @@
+application: boilerplate
+version: 1
+runtime: python27
+api_version: 1
+threadsafe: yes
+
+default_expiration: 3600s
+
+#builtins:
+#- remote_api: on
+
+#pagespeed:
+#  domains_to_rewrite:
+#  - http://example.appspot.com
+#  - https://example.appspot.com
+#  enabled_rewriters:
+#  - ProxyCss
+#  - ProxyJs
+#  - ProxyImages
+#  - ConvertMetaTags
+#  - InlineCss
+#  - CombineCss
+#  - MoveCssToHead
+#  - ImageRecompressPng
+#  - ImageRecompressJpeg
+#  - WebpOptimization
+#  - JsOptimize
+#  disabled_rewriters:
+#  - ImageConvertToJpeg
+#  - LazyloadImages
+
+libraries:
+- name: webapp2
+  version: latest
+- name: jinja2
+  version: latest
+
+handlers:
+- url: /(channel.html|crossdomain.xml|humans.txt|robots.txt)
+  static_files: static/misc/\1
+  upload: static/misc/.+
+  #expiration: 7d
+
+- url: /(apple-touch-icon.+|favicon.ico)
+  static_files: static/favicons/\1
+  upload: static/favicons/.+
+  #expiration: 7d
+
+- url: /css
+  static_dir: static/css
+- url: /img
+  static_dir: static/img
+- url: /js
+  static_dir: static/js
+#- url: /fonts
+#  static_dir: static/fonts
+
+
+- url: /api/.*
+  script: controllers.api.api_controller.app
+
+- url: /admin/.*
+  script: controllers.static.admin_page_controller.app
+  login: admin
+
+- url: /.*
+  script: controllers.static.page_controller.app
+
+
+
+
