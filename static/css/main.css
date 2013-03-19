@@ -93,9 +93,21 @@ textarea {
    Author's custom styles
    ========================================================================== */
 
+html{
+    font:1em/1.5 "Myriad Pro", cursive;
+}
 
+h1,h2,h3,h4,h5,h6,hgroup,
+ul,ol,dd,
+p,figure,
+pre,table,fieldset,hr,
+.header,.media,.island {
+    margin-bottom: 0 0 1.5rem;
+}
 
-
+.not-found {
+    text-align: center;
+}
 
 
 

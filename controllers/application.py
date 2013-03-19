@@ -21,6 +21,7 @@ class RequestHandler(webapp2.RequestHandler):
         self.data = {}
         self.data['config'] = includes.config
         self.data['request_path'] = request.path
+        self.data['user'] = self.user
         
         self.template = None
         self.jinja_environment = jinja2.Environment(

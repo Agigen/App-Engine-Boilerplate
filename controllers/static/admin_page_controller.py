@@ -8,10 +8,13 @@ import datetime
 from controllers import application
 
 
-
 class IndexHandler(application.RequestHandler):
     def get(self):
         self.template = 'admin/index.html'
+
+class SidebarHandler(application.RequestHandler):
+    def get(self):
+        self.template = 'admin/sidebar.html'
 
 
 class NotFoundHandler(application.RequestHandler):
@@ -24,5 +27,6 @@ class NotFoundHandler(application.RequestHandler):
 
 app = application.webapp2.WSGIApplication([
     ('/admin/?', IndexHandler),
+    ('/admin/sidebar/?', SidebarHandler),
     ('/admin/.+', NotFoundHandler), # must be routed last
 ])
