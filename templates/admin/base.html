@@ -51,10 +51,16 @@
                         <p class="navbar-text pull-right">
                             Logged in as {{ user }}
                         </p>
+                        {% set navigation_bar = [
+                            ('/admin/', 'index', 'Home'),
+                            ('/admin/sidebar/', 'sidebar', 'Page With Sidebar'),
+                            ('/admin/other/', 'other', 'Another Page')
+                        ] -%}
+                        {% set active_page = active_page|default('index') -%}
                         <ul class="nav">
-                            <li class="active"><a href="/admin/">Home</a></li>
-                            <li><a href="/admin/sidebar">Page With Sidebare</a></li>
-                            <li><a href="#">Another Page</a></li>
+                            {% for href, id, caption in navigation_bar %}
+                                <li class="{% if id == active_page %}active {% endif %}menu-item menu-item-{{ id }}"><a href="{{ href }}">{{ caption }}</a></li>
+                            {% endfor %}{# for nav_item in navigation_bar #}
                         </ul>
                     </div><!--/.nav-collapse -->
                 </div>
