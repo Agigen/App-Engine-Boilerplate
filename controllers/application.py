@@ -79,7 +79,7 @@ class APIRequestHandler(webapp2.RequestHandler):
             getattr(logging, exception.loglevel)("API exception:\n%s" % traceback.format_exc())
             if not no_response_codes:
                 self.response.set_status(exception.http_status, exception.human_message)
-            self.data['status'] = e.json_message
+            self.data['status'] = exception.json_message
         elif isinstance(exception, ValueError):
             logging.info("ValueError:\n%s" % traceback.format_exc())
             if not no_response_codes:
