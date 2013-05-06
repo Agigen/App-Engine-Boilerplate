@@ -70,6 +70,7 @@ class APIRequestHandler(webapp2.RequestHandler):
     def dispatch(self):
         return_value = super(APIRequestHandler, self).dispatch()
         self.response.out.write(json.dumps(self.data))
+        return return_value
     
     def handle_exception(self, exception, debug_mode):
         self.response.clear()
