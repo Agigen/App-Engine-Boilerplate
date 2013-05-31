@@ -6,6 +6,8 @@ import os
 import json
 import traceback
 import logging
+import datetime
+from google.appengine.api import mail
 
 from google.appengine.api import users
 
@@ -49,6 +51,16 @@ class RequestHandler(webapp2.RequestHandler):
         else:
             logging.warning("Unhandled exception: %s" % traceback.format_exc())
             self.response.set_status(500, "Internal Server Error")
+
+            try:
+                mail.send_mail(
+                    sender="Agigen Appengine App <error@%s.appspotmail.com>" % includes.config.app_identity.get_application_id(),
+                    to="Agigen Appengine Error <appengine_error@agigen.se>",
+                    subject="%s: %s has encountered an unhandeled exception" % (str(datetime.datetime.now()), includes.config.app_identity.get_application_id()),
+                    body="Unhandled exception: %s" % traceback.format_exc())
+            except Exception, e:
+                logging.error('Could not send email about error: %s' % str(e))
+
             self.template = '500.html'
     
     @property
@@ -90,6 +102,16 @@ class APIRequestHandler(webapp2.RequestHandler):
             logging.error("Unhandled exception:\n%s" % traceback.format_exc())
             if not no_response_codes:
                 self.response.set_status(500)
+
+            try:
+                mail.send_mail(
+                    sender="Agigen Appengine App <error@%s.appspotmail.com>" % includes.config.app_identity.get_application_id(),
+                    to="Agigen Appengine Error <appengine_error@agigen.se>",
+                    subject="%s: %s has encountered an unhandeled exception" % (str(datetime.datetime.now()), includes.config.app_identity.get_application_id()),
+                    body="Unhandled exception: %s" % traceback.format_exc())
+            except Exception, e:
+                logging.error('Could not send email about error')
+
             self.data['status'] = 'ERROR_INTERNAL_FAILURE'
     
     @property
