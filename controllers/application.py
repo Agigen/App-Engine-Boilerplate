@@ -56,7 +56,7 @@ class RequestHandler(webapp2.RequestHandler):
                 mail.send_mail(
                     sender="Agigen Appengine App <error@%s.appspotmail.com>" % includes.config.app_identity.get_application_id(),
                     to="Agigen Appengine Error <appengine_error@agigen.se>",
-                    subject="%s: %s has encountered an unhandeled exception" % (str(datetime.datetime.now()), includes.config.app_identity.get_application_id()),
+                    subject="%s: %s has encountered an unhandled exception" % (str(datetime.datetime.now()), includes.config.app_identity.get_application_id()),
                     body="Unhandled exception: %s" % traceback.format_exc())
             except Exception, e:
                 logging.error('Could not send email about error: %s' % str(e))
@@ -107,7 +107,7 @@ class APIRequestHandler(webapp2.RequestHandler):
                 mail.send_mail(
                     sender="Agigen Appengine App <error@%s.appspotmail.com>" % includes.config.app_identity.get_application_id(),
                     to="Agigen Appengine Error <appengine_error@agigen.se>",
-                    subject="%s: %s has encountered an unhandeled exception" % (str(datetime.datetime.now()), includes.config.app_identity.get_application_id()),
+                    subject="%s: %s has encountered an unhandled exception" % (str(datetime.datetime.now()), includes.config.app_identity.get_application_id()),
                     body="Unhandled exception: %s" % traceback.format_exc())
             except Exception, e:
                 logging.error('Could not send email about error')
