@@ -25,9 +25,9 @@ class RequestHandler(webapp2.RequestHandler):
         self.data['request_path'] = request.path
         self.data['user'] = self.user
         
+        template_path = self.template_path if hasattr(self, 'template_path') else os.path.join(os.path.dirname(__file__), '..', 'templates')
+        self.jinja_environment = jinja2.Environment(loader=jinja2.FileSystemLoader(template_path))
         self.template = None
-        self.jinja_environment = jinja2.Environment(
-            loader=jinja2.FileSystemLoader(os.path.join(os.path.dirname(__file__), '..', 'templates')))
 
     def dispatch(self):
         return_value = super(RequestHandler, self).dispatch()
@@ -48,6 +48,11 @@ class RequestHandler(webapp2.RequestHandler):
                 self.template = '404.html'
             else:
                 self.template = '500.html'
+        elif isinstance(exception, ValueError):
+            logging.info("ValueError:\n%s" % traceback.format_exc())
+            self.response.set_status(400, "Invalid Parameter")
+
+            self.template = '400.html'
         else:
             logging.warning("Unhandled exception: %s" % traceback.format_exc())
             self.response.set_status(500, "Internal Server Error")
