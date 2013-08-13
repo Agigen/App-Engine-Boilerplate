@@ -56,15 +56,15 @@ handlers:
 #  static_dir: static/fonts
 
 
-- url: /api/.*
+- url: /api.*
   script: controllers.api.api_controller.app
 
-- url: /admin/.*
-  script: controllers.static.admin_page_controller.app
+- url: /admin.*
+  script: controllers.admin.index_controller.app
   login: admin
 
 - url: /.*
-  script: controllers.static.page_controller.app
+  script: controllers.default.index_controller.app
 
 
 
