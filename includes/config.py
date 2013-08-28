@@ -6,15 +6,22 @@ import includes.exceptions
 
 version = os.environ['CURRENT_VERSION_ID']
 
-facebook_app_id = 'xxxxx'
-facebook_app_secret = 'xxxxx'
-google_analytics_id = 'UA-xxxxxx'
+facebook_app_id = None
+facebook_app_secret = None
+google_analytics_id = None
 
-base_url = 'http://www.example.com'
+
+host = 'www.example.com'
+base_url = 'http://%s' % host
 
 is_devenv = False
 
 if os.environ['SERVER_SOFTWARE'].startswith('Development'):
     is_devenv = True
-    base_url = 'http://localhost:9999'
-    google_analytics_id = 'UA-xxxxxx'
+
+    host = 'localhost:8080'
+    base_url = 'http://%s' % host
+
+    facebook_app_id = None
+    facebook_app_secret = None
+    google_analytics_id = None

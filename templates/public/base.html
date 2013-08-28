@@ -10,6 +10,10 @@
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width">
 
+        {% if config.facebook_app_id -%}
+            <meta property="fb:app_id" content="{{ config.facebook_app_id }}" />
+        {% endif -%}
+
         <link rel="stylesheet" href="/css/normalize.css?_={{ config.version }}">
         <link rel="stylesheet" href="/css/main.css?_={{ config.version }}">
         <script src="/js/vendor/modernizr-2.6.2.min.js"></script>
@@ -19,19 +23,43 @@
                 console.log = console.error = console.info = console.debug = console.warn = console.trace = console.dir = console.dirxml = console.group = console.groupEnd = console.time = console.timeEnd = console.assert = console.profile = function() {};
             }
         </script>
-        <script>
-            var _gaq = _gaq || [];
-            _gaq.push(['_setAccount', '{{ config.google_analytics_id }}']);
-            _gaq.push(['_trackPageview']);
+        {% if config.google_analytics_id -%}
+            <script>
+                var _gaq = _gaq || [];
+                _gaq.push(['_setAccount', '{{ config.google_analytics_id }}'], ['_trackPageview']);
 
-            (function() {
-                var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-                ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-                var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-            })();
-        </script>
+                (function() {
+                    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+                    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+                    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+                })();
+            </script>
+        {% endif -%}
     </head>
     <body>
+        {% if config.facebook_app_id -%}
+            <script>
+                window.fbAsyncInit = function() {
+                    // init the FB JS SDK
+                    FB.init({
+                        appId: '{{ config.facebook_app_id }}',
+                        channelUrl: '//{{ config.host }}/channel.html',
+                        status: true,
+                        xfbml: true
+                    });
+                };
+
+                // Load the SDK asynchronously
+                (function(d, s, id){
+                    var js, fjs = d.getElementsByTagName(s)[0];
+                    if (d.getElementById(id)) {return;}
+                    js = d.createElement(s); js.id = id;
+                    js.src = "//connect.facebook.net/en_US/all.js";
+                    fjs.parentNode.insertBefore(js, fjs);
+                }(document, 'script', 'facebook-jssdk'));
+            </script>
+        {% endif -%}
+
         <!--[if lt IE 7]>
             <p class="chromeframe">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">activate Google Chrome Frame</a> to improve your experience.</p>
         <![endif]-->
