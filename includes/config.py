@@ -6,6 +6,7 @@ import includes.exceptions
 
 version = os.environ['CURRENT_VERSION_ID']
 
+facebook_locale = 'en_US'
 facebook_app_id = None
 facebook_app_secret = None
 google_analytics_id = None
