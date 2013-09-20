@@ -46,10 +46,19 @@ handlers:
   upload: static/favicons/.+
   #expiration: 7d
 
+- url: /.*/css/(.*)
+  static_files: static/css/\1
+  upload: static/css/(.*)
 - url: /css
   static_dir: static/css
+- url: /.*/img/(.*)
+  static_files: static/img/\1
+  upload: static/img/(.*)
 - url: /img
   static_dir: static/img
+- url: /.*/js/(.*)
+  static_files: static/js/\1
+  upload: static/js/(.*)
 - url: /js
   static_dir: static/js
 #- url: /fonts
