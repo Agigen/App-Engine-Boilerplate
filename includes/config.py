@@ -10,6 +10,7 @@ facebook_locale = 'en_US'
 facebook_app_id = None
 facebook_app_secret = None
 google_analytics_id = None
+google_universal_analytics_id = None
 
 
 host = 'www.example.com'

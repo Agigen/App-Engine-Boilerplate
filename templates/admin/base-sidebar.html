@@ -1,33 +1,35 @@
 {% extends "admin/base.html" %}
 {% block basecontent %}
-    <div class="span3">
-        <div class="well sidebar-nav">
-            {% block sidebar %}
-            <ul class="nav nav-list">
-                <li class="nav-header">Sidebar</li>
-                <li class="active"><a href="#">Link</a></li>
-                <li><a href="#">Link</a></li>
-                <li><a href="#">Link</a></li>
-                <li><a href="#">Link</a></li>
-                <li class="nav-header">Sidebar</li>
-                <li><a href="#">Link</a></li>
-                <li><a href="#">Link</a></li>
-                <li><a href="#">Link</a></li>
-                <li><a href="#">Link</a></li>
-                <li><a href="#">Link</a></li>
-                <li><a href="#">Link</a></li>
-                <li><a href="#">Link</a></li>
-                <li><a href="#">Link</a></li>
-                <li class="nav-header">Sidebar</li>
-                <li><a href="#">Link</a></li>
-                <li><a href="#">Link</a></li>
-                <li><a href="#">Link</a></li>
-            </ul>
-            {% endblock sidebar %}
-        </div><!--/.well -->
-    </div><!--/span-->
-    <div class="span9">
-        {% block maincontent %}
-        {% endblock %}
-    </div><!--/span-->
+    <div class="row">
+        <div class="col-md-3">
+            <div class="well sidebar-nav">
+                {% block sidebar %}
+                <ul class="nav nav-list">
+                    <li class="nav-header">Sidebar</li>
+                    <li class="active"><a href="#">Link</a></li>
+                    <li><a href="#">Link</a></li>
+                    <li><a href="#">Link</a></li>
+                    <li><a href="#">Link</a></li>
+                    <li class="nav-header">Sidebar</li>
+                    <li><a href="#">Link</a></li>
+                    <li><a href="#">Link</a></li>
+                    <li><a href="#">Link</a></li>
+                    <li><a href="#">Link</a></li>
+                    <li><a href="#">Link</a></li>
+                    <li><a href="#">Link</a></li>
+                    <li><a href="#">Link</a></li>
+                    <li><a href="#">Link</a></li>
+                    <li class="nav-header">Sidebar</li>
+                    <li><a href="#">Link</a></li>
+                    <li><a href="#">Link</a></li>
+                    <li><a href="#">Link</a></li>
+                </ul>
+                {% endblock sidebar %}
+            </div><!--/.well -->
+        </div><!--/span-->
+        <div class="col-md-9">
+            {% block maincontent %}
+            {% endblock %}
+        </div><!--/span-->
+    </div>
 {% endblock basecontent %}

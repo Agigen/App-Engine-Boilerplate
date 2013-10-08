@@ -6,49 +6,26 @@
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-        <title></title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
         <meta name="description" content="">
-        <meta name="viewport" content="width=device-width">
-
-        <link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/css/bootstrap-combined.min.css" rel="stylesheet">
-        <style type="text/css">
-        body {
-            padding-top: 60px;
-            padding-bottom: 40px;
-        }
-        .sidebar-nav {
-            padding: 9px 0;
-        }
-
-        @media (max-width: 980px) {
-            /* Enable use of floated navbar text */
-            .navbar-text.pull-right {
-                float: none;
-                padding-left: 5px;
-                padding-right: 5px;
-            }
-        }
-        </style>
-        <link rel="stylesheet" href="/css/admin.css">
-        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
-        <script>window.jQuery || document.write('<script src="/js/vendor/jquery-1.9.0.min.js"><\/script>')</script>
-        <script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/js/bootstrap.min.js"></script>
+        <meta name="author" content="Agile Generation AB">
+        <title>Agigen Boilerplate Admin</title>
+  
+        <link href="/css/bootstrap.min.css" rel="stylesheet">
+        <link href="/css/admin.css" rel="stylesheet">
+  
+        <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!--[if lt IE 9]>
+            <script src="/js/vendor/html5shiv.js"></script>
+            <script src="/js/vendor/respond.min.js"></script>
+        <![endif]-->
+  
         <script>
             if(typeof(console) === 'undefined') {
                 var console = {}
-                console.log = console.error = console.info = console.debug = console.warn = console.trace = console.dir = console.dirxml = console.group = console.groupEnd = console.time = console.timeEnd = console.assert = console.profile = function() {};
+                console.log = console.error = console.info = console.debug = console.warn = console.trace = console.dir = console.dirxml = console.group = console.groupEnd = console.time =   console.timeEnd = console.assert = console.profile = function() {};
             }
-        </script>
-        <script>
-            var _gaq = _gaq || [];
-            _gaq.push(['_setAccount', '{{ config.google_analytics_id }}']);
-            _gaq.push(['_trackPageview']);
-
-            (function() {
-                var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-                ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-                var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-            })();
         </script>
     </head>
     <body>
@@ -57,26 +34,29 @@
         <![endif]-->
 
         {% block header %}
-        <div class="navbar navbar-inverse navbar-fixed-top">
-            <div class="navbar-inner">
-                <div class="container-fluid">
-                    <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                    </button>
-                    <a class="brand" href="/admin/">Project Name</a>
-                    <div class="nav-collapse collapse">
+            <div class="navbar navbar-inverse navbar-fixed-top">
+                <div class="container">
+                    <div class="navbar-header">
+                        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </button>
+                        <a class="navbar-brand" href="/">Project name</a>
+                    </div>
+                    <div class="collapse navbar-collapse">
                         <p class="navbar-text pull-right">
                             Logged in as {{ user }}
                         </p>
+
                         {% set navigation_bar = [
                             ('/admin/', 'index', 'Home'),
                             ('/admin/sidebar/', 'sidebar', 'Page With Sidebar'),
                             ('/admin/other/', 'other', 'Another Page')
                         ] -%}
                         {% set active_page = active_page|default('index') -%}
-                        <ul class="nav">
+
+                        <ul class="nav navbar-nav">
                             {% for href, id, caption in navigation_bar %}
                                 <li class="{% if id == active_page %}active {% endif %}menu-item menu-item-{{ id }}"><a href="{{ href }}">{{ caption }}</a></li>
                             {% endfor %}{# for nav_item in navigation_bar #}
@@ -84,26 +64,22 @@
                     </div><!--/.nav-collapse -->
                 </div>
             </div>
-        </div>
         {% endblock header %}
 
-        <div class="container-fluid">
-            <div class="row-fluid">
-                {% block basecontent %}
-                    <div class="span12">
-                        {% block maincontent %}
-                        {% endblock %}
-                    </div><!--/span-->
-                {% endblock basecontent %}
-            </div><!--/row-->
+        <div class="container">
+            {% block basecontent %}
+                {% block maincontent %}
+                {% endblock %}
+            {% endblock basecontent %}
+        </div><!--/row-->
 
+        <footer class="container">
             <hr>
+            <p>Simple App Engine boilerplate, &copy; Agile Generation AB 2013</p>
+        </footer>
 
-            <footer>
-                <p>Simple App Engine boilerplate, &copy; Agile Generation AB 2013</p>
-            </footer>
-
-        </div><!--/.fluid-container-->
+        <script src="/js/vendor/jquery.js"></script>
+        <script src="/js/vendor/bootstrap.min.js"></script>
 
         {% block js -%}
         {% endblock -%}
