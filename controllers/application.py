@@ -14,6 +14,16 @@ from google.appengine.api import users
 import includes.exceptions
 import includes.config
 
+def report_error():
+    if includes.config.error_email:
+        try:
+            mail.send_mail(
+                sender="%s error reporter <error@%s.appspotmail.com>" % (includes.config.app_identity.get_application_id(), includes.config.app_identity.get_application_id()),
+                to=includes.config.error_email,
+                subject="%s: %s has encountered an unhandled exception" % (str(datetime.datetime.now()), includes.config.app_identity.get_application_id()),
+                body="Unhandled exception: %s" % traceback.format_exc())
+        except Exception, e:
+            logging.error('Could not send email about error: %s' % str(e))
 
 class RequestHandler(webapp2.RequestHandler):
     require_roles = []
@@ -57,15 +67,7 @@ class RequestHandler(webapp2.RequestHandler):
             logging.warning("Unhandled exception: %s" % traceback.format_exc())
             self.response.set_status(500, "Internal Server Error")
 
-            if not os.environ['SERVER_SOFTWARE'].startswith('Development'):
-                try:
-                    mail.send_mail(
-                        sender="Agigen Appengine App <error@%s.appspotmail.com>" % includes.config.app_identity.get_application_id(),
-                        to="Agigen Appengine Error <appengine_error@agigen.se>",
-                        subject="%s: %s has encountered an unhandled exception" % (str(datetime.datetime.now()), includes.config.app_identity.get_application_id()),
-                        body="Unhandled exception: %s" % traceback.format_exc())
-                except Exception, e:
-                    logging.error('Could not send email about error: %s' % str(e))
+            report_error()
 
             self.template = '500.html'
     
@@ -109,14 +111,7 @@ class APIRequestHandler(webapp2.RequestHandler):
             if not no_response_codes:
                 self.response.set_status(500)
 
-            try:
-                mail.send_mail(
-                    sender="Agigen Appengine App <error@%s.appspotmail.com>" % includes.config.app_identity.get_application_id(),
-                    to="Agigen Appengine Error <appengine_error@agigen.se>",
-                    subject="%s: %s has encountered an unhandled exception" % (str(datetime.datetime.now()), includes.config.app_identity.get_application_id()),
-                    body="Unhandled exception: %s" % traceback.format_exc())
-            except Exception, e:
-                logging.error('Could not send email about error')
+            report_error()
 
             self.data['status'] = 'ERROR_INTERNAL_FAILURE'
     

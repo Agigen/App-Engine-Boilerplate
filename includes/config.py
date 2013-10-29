@@ -18,6 +18,10 @@ base_url = 'http://%s' % host
 
 is_devenv = False
 
+#error_email = 'errors@example.com'
+#error_email = 'Boilderplate Errors <errors@example.com>'
+error_email = None
+
 if os.environ['SERVER_SOFTWARE'].startswith('Development'):
     is_devenv = True
 
