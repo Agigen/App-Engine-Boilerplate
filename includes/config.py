@@ -13,7 +13,7 @@ google_analytics_id = None
 google_universal_analytics_id = None
 
 
-host = 'www.example.com'
+host = '%s.appspot.com' % app_identity.get_application_id()
 base_url = 'http://%s' % host
 
 is_devenv = False
@@ -31,3 +31,5 @@ if os.environ['SERVER_SOFTWARE'].startswith('Development'):
     facebook_app_id = None
     facebook_app_secret = None
     google_analytics_id = None
+
+    error_email = None
