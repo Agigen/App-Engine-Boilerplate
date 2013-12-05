@@ -37,6 +37,7 @@ class RequestHandler(webapp2.RequestHandler):
         
         template_path = self.template_path if hasattr(self, 'template_path') else os.path.join(os.path.dirname(__file__), '..', 'templates')
         self.jinja_environment = jinja2.Environment(loader=jinja2.FileSystemLoader(template_path))
+        self.jinja_environment.filters['json'] = lambda a: json.dumps(a)
         self.template = None
 
     def dispatch(self):
