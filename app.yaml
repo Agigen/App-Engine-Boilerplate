@@ -4,30 +4,23 @@ runtime: python27
 api_version: 1
 threadsafe: yes
 
-default_expiration: 3600s
+# low expiration for non cache busted assets
+default_expiration: 300s
 
 #builtins:
 #- remote_api: on
 
-#pagespeed:
-#  domains_to_rewrite:
-#  - http://example.appspot.com
-#  - https://example.appspot.com
-#  enabled_rewriters:
-#  - ProxyCss
-#  - ProxyJs
-#  - ProxyImages
-#  - ConvertMetaTags
-#  - InlineCss
-#  - CombineCss
-#  - MoveCssToHead
-#  - ImageRecompressPng
-#  - ImageRecompressJpeg
-#  - WebpOptimization
-#  - JsOptimize
-#  disabled_rewriters:
-#  - ImageConvertToJpeg
-#  - LazyloadImages
+# pagespeed:
+#   enabled_rewriters:
+#   - MinifyCss
+#   disabled_rewriters:
+#   -WebpOptimization
+#   -ImageResize
+#   -ImageConvertToJpeg
+#   -InlinePreviewImages
+#   -LazyloadImages
+#   -ProxyCss
+#   -MoveCssToHead
 
 libraries:
 - name: webapp2
@@ -36,15 +29,19 @@ libraries:
   version: latest
 
 handlers:
-- url: /(channel.html|crossdomain.xml|humans.txt|robots.txt)
+- url: /(channel.html)
   static_files: static/misc/\1
   upload: static/misc/.+
-  #expiration: 7d
+  expiration: 365d
+
+- url: /(crossdomain.xml|humans.txt|robots.txt)
+  static_files: static/misc/\1
+  upload: static/misc/.+
 
 - url: /(apple-touch-icon.+|favicon.ico)
   static_files: static/favicons/\1
   upload: static/favicons/.+
-  #expiration: 7d
+  expiration: 1d
 
 # css
 - url: /.*/css/(.*)
@@ -86,7 +83,3 @@ handlers:
 
 - url: /.*
   script: controllers.default.index_controller.app
-
-
-
-
