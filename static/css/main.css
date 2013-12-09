@@ -1,14 +1,15 @@
 /*
- * HTML5 Boilerplate
+ * Agigen Boilerplate CSS
  *
- * What follows is the result of much research on cross-browser styling.
- * Credit left inline and big thanks to Nicolas Gallagher, Jonathan Neal,
- * Kroc Camen, and the H5BP dev community and team.
  */
 
 /* ==========================================================================
-   Base styles: opinionated defaults
+   Typography
    ========================================================================== */
+
+body {
+   font: .95em/1.5 sans-serif;
+}
 
 html,
 button,
@@ -17,17 +18,6 @@ select,
 textarea {
     color: #222;
 }
-
-body {
-    font-size: 1em;
-    line-height: 1.4;
-}
-
-/*
- * Remove text-shadow in selection highlight: h5bp.com/i
- * These selection declarations have to be separate.
- * Customize the background color to match your design.
- */
 
 ::-moz-selection {
     background: #b3d4fc;
@@ -38,6 +28,11 @@ body {
     background: #b3d4fc;
     text-shadow: none;
 }
+
+
+/* ==========================================================================
+   Misc
+   ========================================================================== */
 
 /*
  * A better looking default horizontal rule
@@ -90,35 +85,96 @@ textarea {
 }
 
 /* ==========================================================================
-   Author's custom styles
+   Layout
    ========================================================================== */
 
-html{
-    font:1em/1.5 "Myriad Pro", cursive;
+.wrapper {
+    width: 90%;
+    margin: 0 auto;
+    max-width: 1152px; /* 90% of 1280 screen */
 }
+
+/* single-direction marigns, read http://csswizardry.com/2012/06/single-direction-margin-declarations/ */
 
 h1,h2,h3,h4,h5,h6,hgroup,
 ul,ol,dd,
 p,figure,
 pre,table,fieldset,hr,
 .header,.media,.island {
-    margin-bottom: 0 0 1.5rem;
+    margin: 0 0 1.5rem;
 }
 
-.not-found {
-    text-align: center;
+.landmark {
+    margin-bottom: 3rem;
+}
+
+.island{
+    padding:1.5rem;
+    border-radius:4px;
+    background-color:#09f;
+    color:#fff;
+}
+
+.island > :last-child {
+    margin-bottom:0;
 }
 
 
+/* ==========================================================================
+   Grid
+   ========================================================================== */
 
+.gw {
+    margin-left: -20px;
+}
 
+.g {
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    padding-left: 20px;
+    float: left;
+}
 
+.g.g-half {
+    width: 50%;
+}
 
+.g.g-one-third {
+    width: 33.333%;
+}
 
+.g.g-two-thirds {
+    width: 66.666%;
+}
 
+.g.g-one-quarter {
+    width: 25%;
+}
 
+.g.g-three-quarters {
+    width: 75%;
+}
 
+@media screen and (max-width: 768px) {
+    .g.g-half .g.g-half,
+    .g.g-three-quarters {
+        width: 100%;
+    }
 
+    .g.g-one-quarter {
+        width: 50%;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .g.g-half,
+    .g.g-one-third,
+    .g.g-two-thirds,
+    .g.g-one-quarter,
+    .g.g-three-quarters {
+        width: 100%;
+    }
+}
 
 
 /* ==========================================================================
@@ -203,12 +259,15 @@ pre,table,fieldset,hr,
  *    `:before` to contain the top-margins of child elements.
  */
 
+.gw:before,
+.gw:after,
 .clearfix:before,
 .clearfix:after {
     content: " "; /* 1 */
     display: table; /* 2 */
 }
 
+.gw:after,
 .clearfix:after {
     clear: both;
 }
@@ -218,6 +277,7 @@ pre,table,fieldset,hr,
  * Include this rule to trigger hasLayout and contain floats.
  */
 
+.gw,
 .clearfix {
     *zoom: 1;
 }
