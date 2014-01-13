@@ -1,18 +1,28 @@
 #!/usr/bin/env python
 
-import webapp2
-import jinja2
-import os
 import json
 import traceback
 import logging
 import datetime
-from google.appengine.api import mail
+import webapp2
 
+from webapp2_extras import jinja2
+
+from google.appengine.api import mail
 from google.appengine.api import users
 
 import includes.exceptions
 import includes.config
+
+def jinja2_factory(app):
+    j = jinja2.Jinja2(app, config={'environment_args':{'autoescape':False}})
+    j.environment.filters.update({
+        'json': lambda a: json.dumps(a)
+    })
+    j.environment.globals.update({
+        'version': includes.config.version
+    })
+    return j
 
 def report_error():
     if includes.config.error_email:
@@ -27,6 +37,14 @@ def report_error():
 
 class RequestHandler(webapp2.RequestHandler):
     require_roles = []
+
+    @webapp2.cached_property
+    def jinja2(self):
+        return jinja2.get_jinja2(factory=jinja2_factory, app=self.app)
+
+    def render_template(self, template, data):
+        return self.jinja2.render_template(template, **data)
+
     def initialize(self, request, response):
         request.charset = 'utf-8'
         super(RequestHandler, self).initialize(request, response)
@@ -34,18 +52,14 @@ class RequestHandler(webapp2.RequestHandler):
         self.data['config'] = includes.config
         self.data['request_path'] = request.path
         self.data['user'] = self.user
-        
-        template_path = self.template_path if hasattr(self, 'template_path') else os.path.join(os.path.dirname(__file__), '..', 'templates')
-        self.jinja_environment = jinja2.Environment(loader=jinja2.FileSystemLoader(template_path))
-        self.jinja_environment.filters['json'] = lambda a: json.dumps(a)
+
         self.template = None
 
     def dispatch(self):
         return_value = super(RequestHandler, self).dispatch()
     
         if self.template:
-            template = self.jinja_environment.get_template(self.template)
-            self.response.out.write(template.render(self.data))
+            self.response.out.write(self.render_template(self.template, self.data))
     
         return return_value
     
