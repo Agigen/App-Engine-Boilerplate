@@ -20,7 +20,7 @@ def jinja2_factory(app):
         'json': lambda a: json.dumps(a)
     })
     j.environment.globals.update({
-        'version': includes.config.version
+        'config': includes.config
     })
     return j
 
@@ -43,16 +43,17 @@ class RequestHandler(webapp2.RequestHandler):
         return jinja2.get_jinja2(factory=jinja2_factory, app=self.app)
 
     def render_template(self, template, data):
+        data.update({
+            'request_path': self.request.path,
+            'user': self.user
+        })
+
         return self.jinja2.render_template(template, **data)
 
     def initialize(self, request, response):
         request.charset = 'utf-8'
         super(RequestHandler, self).initialize(request, response)
         self.data = {}
-        self.data['config'] = includes.config
-        self.data['request_path'] = request.path
-        self.data['user'] = self.user
-
         self.template = None
 
     def dispatch(self):
