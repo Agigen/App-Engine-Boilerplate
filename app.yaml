@@ -74,12 +74,11 @@ handlers:
 #- url: /fonts
 #  static_dir: static/fonts
 
-- url: /api.*
-  script: controllers.api.api_controller.app
-
-- url: /admin.*
-  script: controllers.admin.index_controller.app
+- url: /admin|/admin/.*
+  script: controllers.routes.app
+  secure: always
   login: admin
 
 - url: /.*
-  script: controllers.default.index_controller.app
+  script: controllers.routes.app
+  secure: always

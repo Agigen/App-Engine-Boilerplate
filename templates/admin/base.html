@@ -42,23 +42,24 @@
                             <span class="icon-bar"></span>
                             <span class="icon-bar"></span>
                         </button>
-                        <a class="navbar-brand" href="/">Project name</a>
+                        <a class="navbar-brand" href="{{ uri_for('index') }}">Project name</a>
                     </div>
                     <div class="collapse navbar-collapse">
                         <p class="navbar-text pull-right">
                             Logged in as {{ user }}
                         </p>
 
+                        {# (href, route_name, id, caption) #}
                         {% set navigation_bar = [
-                            ('/admin/', 'index', 'Home'),
-                            ('/admin/sidebar/', 'sidebar', 'Page With Sidebar'),
-                            ('/admin/other/', 'other', 'Another Page')
+                            (None, 'admin-index', 'index', 'Home'),
+                            (None, 'admin-sidebar', 'sidebar', 'Page With Sidebar'),
+                            ('/admin/other/', None, 'other', 'Another Page'),
                         ] -%}
                         {% set active_page = active_page|default('index') -%}
 
                         <ul class="nav navbar-nav">
-                            {% for href, id, caption in navigation_bar %}
-                                <li class="{% if id == active_page %}active {% endif %}menu-item menu-item-{{ id }}"><a href="{{ href }}">{{ caption }}</a></li>
+                            {% for href, route_name, id, caption in navigation_bar %}
+                                <li class="{% if id == active_page %}active {% endif %}menu-item menu-item-{{ id }}"><a href="{{ href if href else uri_for(route_name) }}">{{ caption }}</a></li>
                             {% endfor %}{# for nav_item in navigation_bar #}
                         </ul>
                     </div><!--/.nav-collapse -->
