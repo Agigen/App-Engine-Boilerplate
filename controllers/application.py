@@ -29,14 +29,14 @@ def jinja2_factory(app):
     })
     return j
 
-def report_error():
+def report_error(request):
     if config.error_email:
         try:
             mail.send_mail(
                 sender="%s error reporter <error@%s.appspotmail.com>" % (config.app_identity.get_application_id(), config.app_identity.get_application_id()),
                 to=config.error_email,
                 subject="%s: %s has encountered an unhandled exception" % (str(datetime.datetime.now()), config.app_identity.get_application_id()),
-                body="Unhandled exception: %s" % traceback.format_exc())
+                body="Unhandled exception (%s):\n %s" % (request.path_qs, traceback.format_exc()))
         except Exception, e:
             logging.error('Could not send email about error: %s' % str(e))
 
@@ -117,7 +117,7 @@ class RequestHandler(BaseHandler):
             logging.warning("Unhandled exception: %s" % traceback.format_exc())
             self.response.set_status(500, "Internal Server Error")
 
-            report_error()
+            report_error(self.request)
 
             self.template = '500.html'
 
@@ -155,6 +155,6 @@ class APIRequestHandler(BaseHandler):
             if not no_response_codes:
                 self.response.set_status(500)
 
-            report_error()
+            report_error(self.request)
 
             self.status = 'ERROR_INTERNAL_FAILURE'

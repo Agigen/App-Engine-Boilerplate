@@ -3,7 +3,7 @@
 
 import logging
 from controllers import application
-from webapp2_extras.routes import HandlerPrefixRoute
+from webapp2_extras.routes import HandlerPrefixRoute, PathPrefixRoute
 from webapp2_extras.routes import RedirectRoute as Route
 
 
@@ -23,19 +23,26 @@ config['webapp2_extras.sessions'] = {
 
 app = application.webapp2.WSGIApplication([
     # default
-    HandlerPrefixRoute('controllers.default.index_controller.', [
-        Route(r'/', 'IndexHandler', 'index', strict_slash=True),
+    HandlerPrefixRoute('controllers.default.', [
+        HandlerPrefixRoute('index_controller.', [
+            Route('/', 'IndexHandler', 'index', strict_slash=True),
+        ]),
+
     ]),
 
     # api
-    HandlerPrefixRoute('controllers.api.api_controller.', [
-        Route(r'/api/test', handler='TestHandler'),
+    HandlerPrefixRoute('controllers.api.', [
+        HandlerPrefixRoute('api_controller.', [
+            Route('/api/test', handler='TestHandler'),
+        ]),
     ]),
 
     # admin
-    HandlerPrefixRoute('controllers.admin.index_controller.', [
-        Route(r'/admin/', handler='IndexHandler', name="admin-index", strict_slash=True),
-        Route(r'/admin/sidebar/', handler='SidebarHandler', name="admin-sidebar", strict_slash=True),
+    HandlerPrefixRoute('controllers.admin.', [
+        HandlerPrefixRoute('index_controller.', [
+            Route('/admin', handler='IndexHandler', name="admin-index", strict_slash=True),
+            Route('/admin/sidebar', handler='SidebarHandler', name="admin-sidebar", strict_slash=True),
+        ]),
     ]),
 
     (r'/.+', NotFoundHandler), # must be routed last
