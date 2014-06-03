@@ -2,3 +2,4 @@
 *.so
 *.egg
 *.egg-info
+frontend/bower_components
