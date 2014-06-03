@@ -4,3 +4,4 @@
 *.egg-info
 frontend/bower_components
 node_modules
+.sass-cache
