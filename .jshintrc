@@ -1,0 +1,22 @@
+{
+    "browser": true,
+    "devel": true,
+    "node": true,
+    "curly": true,
+    "eqeqeq": true,
+    "immed": true,
+    "latedef": true,
+    "newcap": true,
+    "noarg": true,
+    "sub": true,
+    "undef": true,
+    "unused": true,
+    "eqnull": true,
+    "jquery": true,
+    "smarttabs": true,
+    "strict": true,
+    "globals": {
+
+    },
+    "boss": true
+}
