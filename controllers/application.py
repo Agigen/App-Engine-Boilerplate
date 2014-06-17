@@ -21,7 +21,8 @@ from includes import config
 def jinja2_factory(app):
     j = jinja2.Jinja2(app, config={'environment_args':{'autoescape':False}})
     j.environment.filters.update({
-        'json': lambda a: json.dumps(a)
+        'json': lambda a: json.dumps(a),
+        'ng': lambda a: "{{%s}}" % a
     })
     j.environment.globals.update({
         'config': config,
