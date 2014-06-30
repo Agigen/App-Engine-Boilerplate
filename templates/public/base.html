@@ -67,7 +67,12 @@
 
         <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
         <script>window.jQuery || document.write('<script src="/js/vendor/jquery-1.10.2.min.js"><\/script>')</script>
+        <script src="/{{ config.version }}/js/agigen.example.js"></script>
         <script src="/{{ config.version }}/js/main.js"></script>
+        <script>
+            var example = new agigen.Example();
+            example.printLine('Example');
+        </script>
 
         {% block js -%}
         {% endblock -%}
