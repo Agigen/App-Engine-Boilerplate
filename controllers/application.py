@@ -55,6 +55,13 @@ class BaseHandler(webapp2.RequestHandler):
         self.session_store = sessions.get_store(request=self.request)
 
         try:
+            if not config.public and not users.is_current_user_admin():
+                raise exceptions.PermissionDeniedError()
+        except exceptions.PermissionDeniedError, e:
+            self.handle_exception(e, debug_mode=False)
+            return
+
+        try:
             # Dispatch the request.
             super(BaseHandler, self).dispatch()
         finally:
@@ -105,8 +112,10 @@ class RequestHandler(BaseHandler):
         if isinstance(exception, exceptions.APIError):
             getattr(logging, exception.loglevel)("API exception:\n%s" % traceback.format_exc())
             self.response.set_status(exception.http_status, exception.human_message)
-            if isinstance(exception, Exceptions.NoSuchEntityError):
+            if isinstance(exception, exceptions.NoSuchEntityError):
                 self.template = '404.html'
+            if isinstance(exception, exceptions.PermissionDeniedError):
+                self.template = '403.html'
             else:
                 self.template = '500.html'
         elif isinstance(exception, ValueError):

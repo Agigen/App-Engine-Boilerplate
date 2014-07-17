@@ -6,6 +6,9 @@ from google.appengine.ext import ndb
 
 version = os.environ['CURRENT_VERSION_ID']
 
+# is the app open for public users?
+public = False
+
 facebook_locale = 'en_US'
 facebook_app_id = None
 facebook_app_secret = None
@@ -19,6 +22,8 @@ base_url = 'http://%s' % host
 is_devenv = False
 secure_cookie = True
 
+
+# where to send error emails
 #error_email = 'errors@example.com'
 #error_email = 'Boilderplate Errors <errors@example.com>'
 error_email = None
@@ -26,6 +31,7 @@ error_email = None
 if os.environ['SERVER_SOFTWARE'].startswith('Development'):
     is_devenv = True
     secure_cookie = False
+    public = True
 
     host = 'localhost:8080'
     base_url = 'http://%s' % host
