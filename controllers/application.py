@@ -54,11 +54,8 @@ class BaseHandler(webapp2.RequestHandler):
         # Get a session store for this request.
         self.session_store = sessions.get_store(request=self.request)
 
-        try:
-            if not config.public and not users.is_current_user_admin():
-                raise exceptions.PermissionDeniedError()
-        except exceptions.PermissionDeniedError, e:
-            self.handle_exception(e, debug_mode=False)
+        if not config.public and not users.is_current_user_admin():
+            self.redirect(users.create_login_url(self.request.path));
             return
 
         try:
