@@ -22,6 +22,18 @@ default_expiration: 300s
 #   -ProxyCss
 #   -MoveCssToHead
 
+skip_files:
+- ^(.*/)?#.*#$
+- ^(.*/)?.*~$
+- ^(.*/)?.*\.py[co]$
+- ^(.*/)?.*/RCS/.*$
+- ^(.*/)?\..*$
+- frontend
+- node_modules
+- Gruntfile.js
+- package.json
+- README.md
+
 libraries:
 - name: webapp2
   version: latest
