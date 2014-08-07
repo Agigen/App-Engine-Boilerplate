@@ -22,7 +22,8 @@ def jinja2_factory(app):
     j = jinja2.Jinja2(app, config={'environment_args':{'autoescape':False}})
     j.environment.filters.update({
         'json': lambda a: json.dumps(a),
-        'ng': lambda a: "{{%s}}" % a
+        'ng': lambda a: "{{%s}}" % a,
+        'i18ng': lambda a: "{{i18n('%s')}}" % a,
     })
     j.environment.globals.update({
         'config': config,
