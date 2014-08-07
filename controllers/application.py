@@ -122,7 +122,7 @@ class RequestHandler(BaseHandler):
 
             self.template = '400.html'
         else:
-            logging.warning("Unhandled exception: %s" % traceback.format_exc())
+            logging.error("Unhandled exception: %s" % traceback.format_exc())
             self.response.set_status(500, "Internal Server Error")
 
             report_error(self.request)
