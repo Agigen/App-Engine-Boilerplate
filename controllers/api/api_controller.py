@@ -5,8 +5,6 @@ import logging
 import webapp2
 import datetime
 
-from includes import exceptions
-
 from controllers import application
 
 

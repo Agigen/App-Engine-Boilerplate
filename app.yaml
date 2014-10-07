@@ -41,6 +41,7 @@ libraries:
   version: latest
 
 handlers:
+# special case handlers
 - url: /(channel.html)
   static_files: static/misc/\1
   upload: static/misc/.+
@@ -55,7 +56,7 @@ handlers:
   upload: static/favicons/.+
   expiration: 1d
 
-# static
+# static handlers
 - url: /.*/static/(.*)
   static_files: static/\1
   upload: static/(.*)
@@ -63,13 +64,7 @@ handlers:
 - url: /static
   static_dir: static
 
-# fonts
-#- url: /.*/fonts/(.*)
-#  static_files: static/fonts/\1
-#  upload: static/fonts/(.*)
-#- url: /fonts
-#  static_dir: static/fonts
-
+# dynamic handlers
 - url: /admin|/admin/.*
   script: controllers.routes.app
   secure: always

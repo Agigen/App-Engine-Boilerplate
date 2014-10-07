@@ -14,8 +14,7 @@ from webapp2_extras import sessions_ndb
 from google.appengine.api import mail
 from google.appengine.api import users
 
-from includes import exceptions
-from includes import config
+import config
 
 
 def jinja2_factory(app):
@@ -32,12 +31,12 @@ def jinja2_factory(app):
     return j
 
 def report_error(request):
-    if config.error_email:
+    if config.application.error_email:
         try:
             mail.send_mail(
-                sender="%s error reporter <error@%s.appspotmail.com>" % (config.app_identity.get_application_id(), config.app_identity.get_application_id()),
-                to=config.error_email,
-                subject="%s: %s has encountered an unhandled exception" % (str(datetime.datetime.now()), config.app_identity.get_application_id()),
+                sender="%s error reporter <error@%s.appspotmail.com>" % (config.application.app_identity.get_application_id(), config.application.app_identity.get_application_id()),
+                to=config.application.error_email,
+                subject="%s: %s has encountered an unhandled exception" % (str(datetime.datetime.now()), config.application.app_identity.get_application_id()),
                 body="Unhandled exception (%s):\n %s" % (request.path_qs, traceback.format_exc()))
         except Exception, e:
             logging.error('Could not send email about error: %s' % str(e))
@@ -55,7 +54,7 @@ class BaseHandler(webapp2.RequestHandler):
         # Get a session store for this request.
         self.session_store = sessions.get_store(request=self.request)
 
-        if not config.public and not users.is_current_user_admin():
+        if not config.application.public and not users.is_current_user_admin():
             self.redirect(users.create_login_url(self.request.path));
             return
 
@@ -88,7 +87,7 @@ class RequestHandler(BaseHandler):
         data.update({
             'request_path': self.request.path,
             'user': self.user,
-            'static_path': '/%s/static' % config.version,
+            'static_path': '/%s/static' % config.application.version,
         })
 
         return self.jinja2.render_template(template, **data)
@@ -108,12 +107,12 @@ class RequestHandler(BaseHandler):
     def handle_exception(self, exception, debug_mode):
         self.response.clear()
 
-        if isinstance(exception, exceptions.APIError):
+        if isinstance(exception, config.exceptions.APIError):
             getattr(logging, exception.loglevel)("API exception:\n%s" % traceback.format_exc())
             self.response.set_status(exception.http_status, exception.human_message)
-            if isinstance(exception, exceptions.NoSuchEntityError):
+            if isinstance(exception, config.exceptions.NoSuchEntityError):
                 self.template = '404.html'
-            if isinstance(exception, exceptions.PermissionDeniedError):
+            if isinstance(exception, config.exceptions.PermissionDeniedError):
                 self.template = '403.html'
             else:
                 self.template = '500.html'
@@ -149,7 +148,7 @@ class APIRequestHandler(BaseHandler):
         self.response.clear()
 
         no_response_codes = self.request.get('suppress_response_codes', None)
-        if isinstance(exception, exceptions.APIError):
+        if isinstance(exception, config.exceptions.APIError):
             getattr(logging, exception.loglevel)("API exception:\n%s" % traceback.format_exc())
             if not no_response_codes:
                 self.response.set_status(exception.http_status, exception.human_message)
