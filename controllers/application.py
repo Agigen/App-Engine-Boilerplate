@@ -87,7 +87,8 @@ class RequestHandler(BaseHandler):
     def render_template(self, template, data):
         data.update({
             'request_path': self.request.path,
-            'user': self.user
+            'user': self.user,
+            'static_path': '/%s/static' % config.version,
         })
 
         return self.jinja2.render_template(template, **data)
