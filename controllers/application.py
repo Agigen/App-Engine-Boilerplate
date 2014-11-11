@@ -33,13 +33,22 @@ def jinja2_factory(app):
 def report_error(request):
     if config.application.error_email:
         try:
+            request_ident = '%s - %s "%s %s" %s "%s"' % (
+                request.remote_addr,
+                users.get_current_user(),
+                request.method,
+                request.path_qs,
+                request.user_agent,
+                request.host
+            )
+
             mail.send_mail(
                 sender="%s error reporter <error@%s.appspotmail.com>" % (config.application.app_identity.get_application_id(), config.application.app_identity.get_application_id()),
                 to=config.application.error_email,
                 subject="%s: %s has encountered an unhandled exception" % (str(datetime.datetime.now()), config.application.app_identity.get_application_id()),
-                body="Unhandled exception (%s):\n %s" % (request.path_qs, traceback.format_exc()))
+                body="Request:\n%s\n\nReferer:\n%s\n\nVersion: %s\n\n%s" % (request_ident, request.referer, os.environ['CURRENT_VERSION_ID'], traceback.format_exc()))
         except Exception, e:
-            logging.error('Could not send email about error: %s' % str(e))
+            logging.error('Could not send email about error')
 
 
 class BaseHandler(webapp2.RequestHandler):
