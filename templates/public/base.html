@@ -8,7 +8,7 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
         <title></title>
 
-        <link rel="stylesheet" href="{{ static_path }}/css/user/main.css">
+        <link rel="stylesheet" href="{{ static_path }}/css/main.css">
 
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width">
@@ -20,7 +20,6 @@
         {# prefetch googleapis dns #}
         <link rel="dns-prefetch" href="//ajax.googleapis.com">
 
-        <script src="{{ static_path }}/js/vendor/modernizr-2.6.2.min.js"></script>
         <script>
             if(typeof(console) === 'undefined') {
                 var console = {}
@@ -65,14 +64,7 @@
             {% endblock -%}
         </div>
 
-        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
-        <script>window.jQuery || document.write('<script src="{{ static_path }}/js/vendor/jquery-1.10.2.min.js"><\/script>')</script>
-        <script src="{{ static_path }}/js/agigen.example.js"></script>
         <script src="{{ static_path }}/js/main.js"></script>
-        <script>
-            var example = new agigen.Example();
-            example.printLine('Example');
-        </script>
 
         {% block js -%}
         {% endblock -%}
