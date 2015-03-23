@@ -23,16 +23,23 @@ default_expiration: 300s
 #   -MoveCssToHead
 
 skip_files:
-- ^(.*/)?#.*#$
-- ^(.*/)?.*~$
-- ^(.*/)?.*\.py[co]$
-- ^(.*/)?.*/RCS/.*$
-- ^(.*/)?\..*$
-- frontend
-- node_modules
+- ^(.*/)?app\.yaml
+- ^(.*/)?app\.yml
+- ^(.*/)?#.*#
+- ^(.*/)?.*~
+- ^(.*/)?.*\.py[co]
+- ^(.*/)?.*/RCS/.*
+- ^(.*/)?\..*
+- ^frontend/(.*/)?
+- ^node_modules/(.*/)?
+- \.gitignore
+- ^\.git/.*
+- gulpfile.js
 - Gruntfile.js
 - package.json
-- README.md
+- bower.json
+- README\..*
+- deploy.sh
 
 libraries:
 - name: webapp2
