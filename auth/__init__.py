@@ -57,7 +57,7 @@ def _generate_session_key():
 def require_auth(method):
     """Auth required decorator"""
     def check_auth(request_handler, *args, **kwargs):
-        _is_local = False #(request_handler.request.headers.get('X-Appengine-Country') == 'ZZ')
+        _is_local = os.environ['SERVER_SOFTWARE'].startswith('Development')
         ssid = request_handler.request.cookies.get(session_cookie_name, None)
         if _is_local or ssid and Auth.verify(ssid):
             return method(request_handler, *args, **kwargs)
