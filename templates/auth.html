@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width">
+    <title>Login</title>
+    <link href="//fonts.googleapis.com/css?family=Open+Sans:300&amp;subset=latin,latin-ext" rel="stylesheet" type="text/css">
+    <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        body, button, input, textarea {
+            font: 1em/1.5 'Open Sans', sans-serif;
+            font-weight: 300;
+        }
+
+        img {
+            max-width: 100%;
+        }
+
+        .wrapper {
+            width: 90%;
+            height: 100%;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .prototype-auth {
+            width: 100%;
+            height: 100%;
+
+            color: #fff;
+            background: #05bcea;
+        }
+
+        a {
+            color: #fff;
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        h1,h2,h3,h4,h5,h6,hgroup,
+        ul,ol,dd,
+        p,figure,
+        pre,table,fieldset,hr{
+            margin: 0 0 1.5rem;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+
+        .prototype-login {
+            position: absolute;
+            top: 50%;
+            left: 0;
+            width: 100%;
+
+            transform: translate(0, -50%);
+            -webkit-transform: translate(0, -50%);
+            -ms-transform: translate(0, -50%);
+            text-align: center;
+        }
+
+        .form-group {
+            border-radius: 5px;
+            overflow: hidden;
+            border: none;
+        }
+
+        .form-group--inline {
+            display: inline-block;
+            margin-left: .8em;
+        }
+
+        .form-group--inline:first-child {
+            margin-left: 0;
+        }
+
+        .form-group label, .form-group input, .form-group button {
+            border: none;
+            margin: 0;
+            padding: .8em;
+            display: block;
+            float: left;
+            font-size: 1.2em;
+            outline: none;
+            vertical-align: middle;
+            line-height: 1em;
+            height: 1em;
+
+            -moz-box-sizing: content-box;
+            box-sizing: content-box;
+        }
+
+        .disabled {
+            opacity: .7;
+        }
+
+        .error .form-group label,
+        .error .form-group label.btn--no-hover:hover {
+            background-color: #cc3333;
+        }
+
+        .label-icon .label-text {
+            display: none;
+        }
+
+        .label-icon {
+            width: 1em;
+            text-align: center;
+        }
+
+        .credits {
+            position: absolute;
+            bottom: 1.5rem;
+            left: 0;
+            width: 100%;
+            text-align: center;
+            color: #fff;
+
+            font-size: .8em;
+        }
+
+        .credits--logo {
+            margin-left: .5em;
+            vertical-align: -.2em;
+        }
+
+        .btn,
+        .btn.btn--no-hover:hover {
+            background: #f06;
+            padding: .8em;
+            border: none;
+            outline: none;
+            box-sizing: content-box;
+            color: #fff;
+            cursor: default;
+
+            transition: background-color 100ms;
+            -webkit-transition: background-color 100ms;
+        }
+
+        .btn:hover {
+            background: #d04;
+            cursor: pointer;
+        }
+
+        .btn:active {
+            background-color: #222;
+            box-shadow: inset 0 0 .25em rgba(0,0,0,.15);
+        }
+
+        @media screen and (max-width: 420px) {
+            .form-group label, .form-group input, .form-group button {
+                height: auto;
+            }
+
+            .form-group--inline {
+                margin-left: 0;
+                width: 100%;
+                box-sizing: border-box;
+                -moz-box-sizing: border-box;
+            }
+
+            .form-group--inline input {
+                width: 100%;
+            }
+
+            .form-group--inline label {
+                display: none;
+            }
+
+            .form-group button {
+                width: 100%;
+                box-sizing: border-box;
+                -moz-box-sizing: border-box;
+            }
+
+            .label-icon .label-text {
+                display: inline-block;
+            }
+
+            .label-icon i {
+                display: none;
+            }
+
+            .form-group {
+                width: 100%;
+            }
+        }
+
+    </style>
+</head>
+<body>
+    <div class="prototype-auth">
+        <div class="wrapper">
+            <div class="prototype-login">
+                <h1><img src="http://agigen.se/img/contact/fearless-redpanda.gif" alt="Agigen" title="Agigen" width="185" height="230"></h1>
+                <form method="POST" class="prototype-login__form js_login-form">
+                    <div class="form-group form-group--inline">
+                        <label for="password" class="btn btn--no-hover label-icon"><i class="fa fa-lock"></i><span class="label-text">Lösenord:</span></label><!--
+                     --><input type="password" name="password" id="password">
+                    </div><!--
+                 --><div class="form-group form-group--inline">
+                        <button class="btn label-icon" type="submit"><i class="fa fa-caret-right"></i><span class="label-text">Fortsätt</span></button>
+                    </div>
+                </form>
+            </div>
+            <div class="credits">
+                By
+                <a href="http://agigen.se">
+                    <svg style="height: 16px; vertical-align: -0.2em;" class="color-animation" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 244.8 190.6" enable-background="new 0 0 244.8 190.6" xml:space="preserve">
+                        <path fill="#ffffff" d="M92.1,3.8C105.7,15.2,219.5,105.1,240,185.9c-69.6-117.8-200.3,13.7-233.3,0
+                            C-9.8,181.3,80.7-1.3,92.1,3.8z"></path>
+                    </svg>
+                    Agile Generation AB
+                </a>
+            </div>
+        </div>
+    </div>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <script>
+        (function($, window, undefined) {
+            "use strict";
+            $('.js_login-form').on('submit', function(e) {
+                var $this = $(this);
+                e.preventDefault();
+                $.ajax({
+                    type: 'POST',
+                    data: $this.serialize(),
+                    dataType: 'json',
+                    success: function(data) {
+                        if (data.status === 'ok') {
+                            $('.prototype-auth').fadeOut(800, function() {
+                                window.location = data.next;
+                            });
+                        } else {
+                            $this.addClass('error');
+                        }
+                    }
+                });
+            });
+
+            $('.js_login-form').on('click', function() {
+                $(this).removeClass('error');
+            });
+        }(window.jQuery, window));
+
+    </script>
+</body>
+</html>

@@ -10,6 +10,7 @@ from controllers import application
 from webapp2_extras.routes import HandlerPrefixRoute, PathPrefixRoute
 from webapp2_extras.routes import RedirectRoute as Route
 
+import auth
 import config.application
 
 class NotFoundHandler(application.RequestHandler):
@@ -50,5 +51,6 @@ app = application.webapp2.WSGIApplication([
         ]),
     ]),
 
+    (r'/login', auth.LoginHandler),
     (r'/.+', NotFoundHandler), # must be routed last
 ], config=webapp_config)

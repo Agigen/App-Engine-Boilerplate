@@ -6,10 +6,10 @@ import webapp2
 import datetime
 
 from controllers import application
-
+import auth
 
 class IndexHandler(application.RequestHandler):
-    def head(self):
-        pass
+
+    @auth.require_auth
     def get(self):
         self.template = 'public/index.html'
