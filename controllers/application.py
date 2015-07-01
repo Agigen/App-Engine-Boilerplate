@@ -145,6 +145,11 @@ class APIRequestHandler(BaseHandler):
         self.status = 'ok'
         self.data = {}
 
+        try:
+            self.request_json = json.loads(self.request.body) if self.request.body else {}
+        except ValueError:
+            self.request_json = None
+
         return_value = super(APIRequestHandler, self).dispatch()
         self.response.out.write(json.dumps({
             'status': self.status.lower(),
