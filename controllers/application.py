@@ -121,7 +121,7 @@ class RequestHandler(BaseHandler):
             self.response.set_status(exception.http_status, exception.human_message)
             if isinstance(exception, config.exceptions.NoSuchEntityError):
                 self.template = '404.html'
-            if isinstance(exception, config.exceptions.PermissionDeniedError):
+            elif isinstance(exception, config.exceptions.PermissionDeniedError):
                 self.template = '403.html'
             else:
                 self.template = '500.html'
