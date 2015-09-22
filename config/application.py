@@ -16,7 +16,7 @@ google_analytics_id = None
 google_universal_analytics_id = None
 
 
-host = '%s-%s.appspot.com' % (self.request.environ["CURRENT_VERSION_ID"].split('.')[1], app_identity.get_application_id())
+host = '%s-dot-%s.appspot.com' % (self.request.environ["CURRENT_VERSION_ID"].split('.')[0], app_identity.get_application_id())
 base_url = 'https://%s' % host
 
 is_devenv = False
