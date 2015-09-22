@@ -16,8 +16,8 @@ google_analytics_id = None
 google_universal_analytics_id = None
 
 
-host = '%s.appspot.com' % app_identity.get_application_id()
-base_url = 'http://%s' % host
+host = '%s-%s.appspot.com' % (self.request.environ["CURRENT_VERSION_ID"].split('.')[1], app_identity.get_application_id())
+base_url = 'https://%s' % host
 
 is_devenv = False
 secure_cookie = True
@@ -33,8 +33,7 @@ if os.environ['SERVER_SOFTWARE'].startswith('Development'):
     secure_cookie = False
     public = True
 
-    host = 'localhost:8080'
-    base_url = 'http://%s' % host
+    base_url = 'http://%s' % app_identity.get_default_version_hostname()
 
     facebook_app_id = None
     facebook_app_secret = None
