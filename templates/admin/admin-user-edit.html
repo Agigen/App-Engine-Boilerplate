@@ -1,0 +1,34 @@
+{% extends "admin/base.html" %}
+{% set active_page = 'admin-users' -%}
+
+{% block maincontent %}
+<div class="row">
+
+    <form method="POST" class="form col-sm-12 col-md-8 col-lg-4">
+        <h1>{{ 'Add user' if not admin_user else 'Edit user' }}</h1>
+
+        <fieldset class="form-group">
+            <label for="email">Email</label>
+            <input name="email" class="form-control" id="email" type="email" placeholder="user@example.org" required value="{{ admin_user.email if admin_user else '' }}">
+        </fieldset>
+
+        <fieldset class="form-group">
+            <label for="role">Role</label>
+            <select name="role" class="form-control c-select" id="role">
+                {% for r in roles %}
+                <option value="{{loop.index0}}" {% if admin_user and admin_user.role == loop.index0 %}selected="selected"{% endif %} >{{r}}</option>
+                {% endfor %}
+            </select>
+        </fieldset>
+        {% if not admin_user %}
+        <fieldset class="form-group">
+            <input type="checkbox" name="send-email" id="send-email">
+            <label for="send-email">Send welcome email</label>
+        </fieldset>
+        {% endif %}
+        <button class="btn btn-success">Save</button>
+
+    </form>
+</div>
+
+{% endblock %}

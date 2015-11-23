@@ -54,5 +54,15 @@
         <![endif]-->
 
         <p>You do not have permissions to view this page.</p>
+        {% if user %}
+        <p>
+            You are logged in as {{ user.email() }}. You can try to
+            <a href="{{ login_url }}">log in with a different account</a>.
+        </p>
+        {% else %}
+        <p>
+            <a href="{{ login_url }}">Log in here</a>.
+        </p>
+        {% endif %}
     </body>
 </html>

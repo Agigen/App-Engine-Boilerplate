@@ -15,10 +15,11 @@ from google.appengine.api import mail
 from google.appengine.api import users
 
 import config
+from config import exceptions
 
 
 def jinja2_factory(app):
-    j = jinja2.Jinja2(app, config={'environment_args':{'autoescape':False}})
+    j = jinja2.Jinja2(app, config={'environment_args': {'autoescape': True}})
     j.environment.filters.update({
         'json': lambda a: json.dumps(a),
         'ng': lambda a: "{{%s}}" % a,
@@ -29,6 +30,7 @@ def jinja2_factory(app):
         'uri_for': webapp2.uri_for
     })
     return j
+
 
 def report_error(request):
     if config.application.error_email:
@@ -116,12 +118,13 @@ class RequestHandler(BaseHandler):
     def handle_exception(self, exception, debug_mode):
         self.response.clear()
 
-        if isinstance(exception, config.exceptions.APIError):
+        if isinstance(exception, exceptions.APIError):
             getattr(logging, exception.loglevel)("API exception:\n%s" % traceback.format_exc())
             self.response.set_status(exception.http_status, exception.human_message)
-            if isinstance(exception, config.exceptions.NoSuchEntityError):
+            if isinstance(exception, exceptions.NoSuchEntityError):
                 self.template = '404.html'
-            elif isinstance(exception, config.exceptions.PermissionDeniedError):
+            elif isinstance(exception, exceptions.PermissionDeniedError):
+                self.data['login_url'] = users.create_login_url(self.request.path)
                 self.template = '403.html'
             else:
                 self.template = '500.html'
@@ -162,7 +165,7 @@ class APIRequestHandler(BaseHandler):
         self.response.clear()
 
         no_response_codes = self.request.get('suppress_response_codes', None)
-        if isinstance(exception, config.exceptions.APIError):
+        if isinstance(exception, exceptions.APIError):
             getattr(logging, exception.loglevel)("API exception:\n%s" % traceback.format_exc())
             if not no_response_codes:
                 self.response.set_status(exception.http_status, exception.human_message)

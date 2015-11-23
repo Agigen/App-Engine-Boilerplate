@@ -79,7 +79,6 @@ handlers:
 - url: /admin|/admin/.*
   script: controllers.routes.app
   secure: always
-  login: admin
 
 - url: /.*
   script: controllers.routes.app

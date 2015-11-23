@@ -16,7 +16,7 @@ google_analytics_id = None
 google_universal_analytics_id = None
 
 
-host = '%s-dot-%s.appspot.com' % (self.request.environ["CURRENT_VERSION_ID"].split('.')[0], app_identity.get_application_id())
+host = '%s-dot-%s.appspot.com' % (version.split('.')[0], app_identity.get_application_id())
 base_url = 'https://%s' % host
 
 is_devenv = False
@@ -24,8 +24,8 @@ secure_cookie = True
 
 
 # where to send error emails
-#error_email = 'errors@example.com'
-#error_email = 'Boilderplate Errors <errors@example.com>'
+# error_email = 'errors@example.com'
+# error_email = 'Boilderplate Errors <errors@example.com>'
 error_email = None
 
 if os.environ['SERVER_SOFTWARE'].startswith('Development'):

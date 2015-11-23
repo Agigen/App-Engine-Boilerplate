@@ -9,8 +9,8 @@
         <meta name="author" content="Agile Generation AB">
         <title>Agigen Boilerplate Admin</title>
 
-        <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet">
-        <link href="{{ static_path }}/css/user/admin.css" rel="stylesheet">
+        <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha/css/bootstrap.min.css" rel="stylesheet">
+        <link href="{{ static_path }}/css/main.css" rel="stylesheet">
 
         <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
         <!--[if lt IE 9]>
@@ -31,40 +31,37 @@
         <![endif]-->
 
         {% block header %}
-            <div class="navbar navbar-inverse navbar-fixed-top">
+
+            <nav class="navbar navbar-dark bg-inverse">
                 <div class="container">
-                    <div class="navbar-header">
-                        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                            <span class="icon-bar"></span>
-                            <span class="icon-bar"></span>
-                            <span class="icon-bar"></span>
-                        </button>
-                        <a class="navbar-brand" href="{{ uri_for('index') }}">Project name</a>
-                    </div>
-                    <div class="collapse navbar-collapse">
-                        <p class="navbar-text pull-right">
-                            Logged in as {{ user }}
-                        </p>
+                    <button class="navbar-toggler hidden-sm-up" type="button" data-toggle="collapse" data-target="#collapse-navbar">
+                        &#9776;
+                    </button>
+                    <div class="collapse navbar-toggleable-xs" id="collapse-navbar">
+                        <a class="navbar-brand" href="#">Project name</a>
 
                         {# (href, route_name, id, caption) #}
                         {% set navigation_bar = [
                             (None, 'admin-index', 'index', 'Home'),
-                            (None, 'admin-sidebar', 'sidebar', 'Page With Sidebar'),
-                            ('/admin/other/', None, 'other', 'Another Page'),
+                            (None, 'admin-users-all', 'admin-users', 'Admin users'),
                         ] -%}
                         {% set active_page = active_page|default('index') -%}
 
                         <ul class="nav navbar-nav">
                             {% for href, route_name, id, caption in navigation_bar %}
-                                <li class="{% if id == active_page %}active {% endif %}menu-item menu-item-{{ id }}"><a href="{{ href if href else uri_for(route_name) }}">{{ caption }}</a></li>
-                            {% endfor %}{# for nav_item in navigation_bar #}
+                                <li class="{% if id == active_page %}active {% endif %}nav-item nav-item-{{ id }}">
+                                    <a href="{{ href if href else uri_for(route_name) }}" class="nav-link">{{ caption }}</a>
+                                </li>
+                            {% endfor %}
                         </ul>
-                    </div><!--/.nav-collapse -->
+                    </div>
+
                 </div>
-            </div>
+            </nav>
+
         {% endblock header %}
 
-        <div class="container">
+        <div class="container m-t">
             {% block basecontent %}
                 {% block maincontent %}
                 {% endblock %}
@@ -73,11 +70,18 @@
 
         <footer class="container">
             <hr>
-            <p>Simple App Engine boilerplate, by <a href="http://agigen.se">Agigen - Agile Generation AB</a></p>
+            <div class="row">
+                <div class="col-md-6">
+                    <p>Simple App Engine boilerplate, by <a href="http://agigen.se">Agigen - Agile Generation AB</a></p>
+                </div>
+                <div class="col-md-6">
+                    <p class="pull-right">Logged in as: {{ user.email() }}</p>
+                </div>
+            </div>
         </footer>
 
-        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-        <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+        <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha/js/bootstrap.min.js"></script>
 
         {% block js -%}
         {% endblock -%}

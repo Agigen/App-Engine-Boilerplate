@@ -1,17 +1,16 @@
 #!/usr/bin/env python
-#coding=utf8
+# coding=utf8
 
 import logging
 import sys
-
-sys.path[0:0] = ['libs']
 
 from controllers import application
 from webapp2_extras.routes import HandlerPrefixRoute, PathPrefixRoute
 from webapp2_extras.routes import RedirectRoute as Route
 
-import auth
+import simple_auth
 import config.application
+
 
 class NotFoundHandler(application.RequestHandler):
     def get(self):
@@ -49,8 +48,13 @@ app = application.webapp2.WSGIApplication([
             Route('/admin', handler='IndexHandler', name="admin-index", strict_slash=True),
             Route('/admin/sidebar', handler='SidebarHandler', name="admin-sidebar", strict_slash=True),
         ]),
+        HandlerPrefixRoute('admin_user_controller.', [
+            Route('/admin/admin-users', handler='AdminUsersHandler', name="admin-users-all", strict_slash=True),
+            Route('/admin/admin-users/<user_id>', handler='AdminUserHandler', name="admin-user", strict_slash=True),
+
+        ]),
     ]),
 
-    (r'/login', auth.LoginHandler),
+    (r'/login', simple_auth.LoginHandler),
     (r'/.+', NotFoundHandler), # must be routed last
 ], config=webapp_config)

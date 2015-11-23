@@ -1,0 +1,28 @@
+{% extends "admin/base.html" %}
+{% set active_page = 'admin-users' -%}
+
+{% block maincontent %}
+
+<a href="{{ uri_for('admin-user', user_id='add' ) }}" class="btn btn-primary m-y">Add user</a>
+
+<h1>List of admin users</h1>
+<table class="table table-striped">
+    <thead class="thead-default">
+        <th>Email</th>
+        <th>Role</th>
+    </thead>
+    <tbody>
+    {% for u in admin_users %}
+        <tr>
+            <td>
+                <a href="{{ uri_for('admin-user', user_id=u.key.id()) }}">{{ u.email }}</a>
+            </td>
+            <td>{{ u.role }} ({{ ROLES[u.role] }})</td>
+        </tr>
+    {% endfor %}
+</table>
+
+
+
+{% endblock %}
+
