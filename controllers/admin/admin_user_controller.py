@@ -8,10 +8,11 @@ import datetime
 from controllers import application
 from admin_users.models import ROLES, AU_KN, AdminUser
 from admin_users.admin_auth import requires_role
-
+from admin_users.forms import AdminUserForm
 from google.appengine.api import mail
 
 import config
+
 
 
 class AdminUsersHandler(application.RequestHandler):
@@ -23,34 +24,41 @@ class AdminUsersHandler(application.RequestHandler):
 
 
 class AdminUserHandler(application.RequestHandler):
+    _template = 'admin/admin-user-edit.html'
+
     @requires_role(role=3)
     def get(self, user_id):
-        self.data.update(roles=ROLES, user_id=user_id)
+        self.data.update(form=AdminUserForm())
         if user_id != 'add':
             admin_user = AdminUser.get_by_id(int(user_id))
-            self.data.update(admin_user=admin_user)
-
-        self.template = 'admin/admin-user-edit.html'
+            self.data.update(form=AdminUserForm(obj=admin_user))
+            self.template = self._template
 
     @requires_role(role=0)
     def post(self, user_id):
         if user_id and user_id != 'add':
             u = AdminUser.get_by_id(int(user_id))
         else:
-            # Check if user exists. If so, use that entity.
-            u = AdminUser.get_by_email(self.request.get('email'))
-            if not u:
-                u = AdminUser()
+            # New user.
+            u = AdminUser()
 
-        u.email = self.request.get('email')
-        u.role = int(self.request.get('role', '3'))
-        u.put()
-        if self.request.get('send-email'):
-            self.send_welcome_email(u.email)
+        form = AdminUserForm(self.request.POST)
 
-        logging.debug('Updated admin user.')
+        if form.validate():
+            # Populate the user object with data from the form.
+            form.populate_obj(u)
+            u.put()
 
-        self.redirect(webapp2.uri_for('admin-users-all'))
+            if form.send_welcome_email.data:
+                self.send_welcome_email(u.email)
+
+            logging.debug('Updated admin user.')
+            self.redirect(webapp2.uri_for('admin-users-all'))
+        else:
+            logging.debug('Errors in form')
+            self.data.update(form=form)
+            self.template = self._template
+
 
     def send_welcome_email(self, email_address):
         app_id = config.application.app_identity.get_application_id()

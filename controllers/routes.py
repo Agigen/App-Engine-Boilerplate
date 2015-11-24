@@ -32,7 +32,6 @@ app = application.webapp2.WSGIApplication([
         HandlerPrefixRoute('index_controller.', [
             Route('/', 'IndexHandler', 'index', strict_slash=True),
         ]),
-
     ]),
 
     # api
@@ -51,7 +50,6 @@ app = application.webapp2.WSGIApplication([
         HandlerPrefixRoute('admin_user_controller.', [
             Route('/admin/admin-users', handler='AdminUsersHandler', name="admin-users-all", strict_slash=True),
             Route('/admin/admin-users/<user_id>', handler='AdminUserHandler', name="admin-user", strict_slash=True),
-
         ]),
     ]),
 

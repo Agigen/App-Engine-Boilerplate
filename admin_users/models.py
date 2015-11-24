@@ -10,8 +10,8 @@ AU_KN = 'admin_user_%s'
 
 
 class AdminUser(ndb.Model):
-    email = ndb.StringProperty()
-    role = ndb.IntegerProperty()
+    email = ndb.StringProperty(required=True)
+    role = ndb.IntegerProperty(required=True, default=2)
     google_user = ndb.UserProperty()
 
     @staticmethod
