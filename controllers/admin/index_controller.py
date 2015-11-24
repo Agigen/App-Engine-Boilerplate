@@ -12,7 +12,6 @@ from admin_users.admin_auth import requires_role
 class IndexHandler(application.RequestHandler):
     @requires_role(role=3)
     def get(self):
-        logging.debug('Loading index template.')
         self.template = 'admin/index.html'
 
 

@@ -9,21 +9,20 @@ import urllib
 import os
 import json
 from google.appengine.ext import ndb
+import config
 
 import controllers.application
 
-# md5(pwd)
-passwords = [
-    '5f4dcc3b5aa765d61d8327deb882cf99', # password
-]
 
-session_cookie_name = 'SSID'
+session_cookie_name = 'SIMPLE_AUTH_SSID'
 login_path = '/login'
 
 LIFETIME_SECS = 2592000
 
+
 class Error(Exception):
     """General auth error"""
+
 
 class Auth(ndb.Model):
     ssid = ndb.StringProperty(required=True)
@@ -52,22 +51,21 @@ class Auth(ndb.Model):
 
 
 def _generate_session_key():
-    return os.urandom(64).encode("hex")
+    return os.urandom(128).encode("hex")
 
-def require_auth(method):
-    """Auth required decorator"""
-    def check_auth(request_handler, *args, **kwargs):
-        _is_local = os.environ['SERVER_SOFTWARE'].startswith('Development')
-        ssid = request_handler.request.cookies.get(session_cookie_name, None)
-        if _is_local or ssid and Auth.verify(ssid):
-            return method(request_handler, *args, **kwargs)
 
-        return request_handler.redirect('%s?%s' % (
-            login_path,
-            urllib.urlencode({'next': request_handler.request.uri})
-            ))
+def check_auth(request_handler, *args, **kwargs):
+    _is_local = config.application.simple_auth.get('except_devserver') \
+                and os.environ['SERVER_SOFTWARE'].startswith('Development')
+    ssid = request_handler.request.cookies.get(session_cookie_name, None)
+    if _is_local or ssid and Auth.verify(ssid):
+        return True
 
-    return check_auth
+    return request_handler.redirect('%s?%s' % (
+        login_path,
+        urllib.urlencode({'next': request_handler.request.uri})
+        ))
+
 
 class LoginHandler(webapp2.RequestHandler):
     @webapp2.cached_property
@@ -77,14 +75,14 @@ class LoginHandler(webapp2.RequestHandler):
     """Login request handler"""
     def get(self):
         """Show login page"""
-        self.response.out.write(self.jinja2.render_template('auth.html'))
+        self.response.out.write(self.jinja2.render_template('simple_auth.html'))
 
     def post(self):
         """Handle login post"""
         if 'X-Requested-With' in self.request.headers:
             self.response.headers['Content-Type'] = 'application/json'
 
-        if hashlib.md5(self.request.get('password')).hexdigest() in passwords:
+        if hashlib.md5(self.request.get('password')).hexdigest() in config.application.simple_auth.get('md5ed_passwords', []):
             ssid = _generate_session_key()
             a = Auth(
                 id=ssid,

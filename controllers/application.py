@@ -16,6 +16,7 @@ from google.appengine.api import users
 
 import config
 from config import exceptions
+import simple_auth
 
 
 def jinja2_factory(app):
@@ -54,6 +55,9 @@ def report_error(request):
 
 
 class BaseHandler(webapp2.RequestHandler):
+    """
+    Common base for all requests.
+    """
     def head(self, *args, **kwargs):
         pass
 
@@ -65,9 +69,9 @@ class BaseHandler(webapp2.RequestHandler):
         # Get a session store for this request.
         self.session_store = sessions.get_store(request=self.request)
 
-        if not config.application.public and not users.is_current_user_admin():
-            self.redirect(users.create_login_url(self.request.path));
-            return
+        # Check the simple auth requirements.
+        if config.application.simple_auth.get('enabled'):
+            simple_auth.check_auth(self)
 
         try:
             # Dispatch the request.
@@ -88,7 +92,9 @@ class BaseHandler(webapp2.RequestHandler):
 
 
 class RequestHandler(BaseHandler):
-    require_roles = []
+    """
+    Used for normal page requests.
+    """
 
     @webapp2.cached_property
     def jinja2(self):
@@ -143,6 +149,9 @@ class RequestHandler(BaseHandler):
 
 
 class APIRequestHandler(BaseHandler):
+    """
+    Used for API requests. Will give you json-type http-responses.
+    """
     def dispatch(self):
         self.response.headers['Content-Type'] = 'application/json'
         self.status = 'ok'
