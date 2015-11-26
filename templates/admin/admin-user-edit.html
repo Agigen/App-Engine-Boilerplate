@@ -33,6 +33,11 @@
         {% endif %}
 
         <button class="btn btn-success">Save</button>
+
+        {% if admin_user %}
+        <a href="{{ uri_for('admin-user-delete', user_id=admin_user.key.id()) }}"
+           class="btn btn-danger">Delete...</a>
+        {% endif %}
     </form>
 </div>
 

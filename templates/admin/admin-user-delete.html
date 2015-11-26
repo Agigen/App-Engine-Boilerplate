@@ -1,0 +1,14 @@
+{% extends "admin/base.html" %}
+{% set active_page = 'admin-users' -%}
+
+{% block maincontent %}
+<div class="row">
+
+    <form method="POST" class="form col-sm-12 col-md-8 col-lg-4">
+        <h1>Delete</h1>
+        <p>This will permanently delete the user {{ u.email }}.</p>
+        <button class="btn btn-danger">Delete</button>
+    </form>
+</div>
+
+{% endblock %}

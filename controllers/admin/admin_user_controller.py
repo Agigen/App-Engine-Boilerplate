@@ -10,6 +10,7 @@ from admin_users.models import ROLES, AU_KN, AdminUser
 from admin_users.admin_auth import requires_role
 from admin_users.forms import AdminUserForm
 from google.appengine.api import mail
+from config import exceptions
 
 import config
 
@@ -31,7 +32,7 @@ class AdminUserHandler(application.RequestHandler):
         self.data.update(form=AdminUserForm())
         if user_id != 'add':
             admin_user = AdminUser.get_by_id(int(user_id))
-            self.data.update(form=AdminUserForm(obj=admin_user))
+            self.data.update(form=AdminUserForm(obj=admin_user), admin_user=admin_user)
 
         self.template = self._template
 
@@ -70,3 +71,21 @@ class AdminUserHandler(application.RequestHandler):
             body="You were added as admin user for the application %s. Log in at %s. \nYou were added by %s" %
             (app_id, config.application.base_url + webapp2.uri_for('admin-index'), self.user.email())
         )
+
+
+class AdminUserDeleteHandler(application.RequestHandler):
+    def get(self, user_id):
+        try:
+            admin_user = AdminUser.get_by_id(int(user_id))
+            assert admin_user
+        except:
+            raise exceptions.NoSuchEntityError()
+
+        self.data.update(u=admin_user)
+        self.template = 'admin/admin-user-delete.html'
+
+    @requires_role(role=0)
+    def post(self, user_id):
+        u = AdminUser.get_by_id(int(user_id))
+        u.key.delete()
+        self.redirect(webapp2.uri_for('admin-users-all'))
