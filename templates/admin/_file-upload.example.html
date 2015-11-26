@@ -1,0 +1,15 @@
+
+<div class="form-group">
+    <label for="file">File upload</label>
+
+    <!-- file_upload_url must be made available in the controller before rendering the template. -->
+    <input class="form-control" id="file" type="file" name="file" multiple
+           data-action="{{ file_upload_url }}" data-key-input-id="file-keys">
+
+    <!-- This element is where the blob keys will end up in. Comma separated if multiple.
+         You will need to handle these values in the controller when recieving the form. -->
+    <input type="hidden" name="file-keys" id="file-keys">
+</div>
+
+<script src="{{ static_path }}/admin/js/file-upload.js"></script>
+

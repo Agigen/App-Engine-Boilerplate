@@ -14,12 +14,12 @@ from google.appengine.api import mail
 import config
 
 
-
 class AdminUsersHandler(application.RequestHandler):
     @requires_role(role=3)
     def get(self):
         admin_users = AdminUser.query().fetch()
         self.data.update(admin_users=admin_users, ROLES=ROLES)
+
         self.template = 'admin/admin-users.html'
 
 
@@ -32,7 +32,8 @@ class AdminUserHandler(application.RequestHandler):
         if user_id != 'add':
             admin_user = AdminUser.get_by_id(int(user_id))
             self.data.update(form=AdminUserForm(obj=admin_user))
-            self.template = self._template
+
+        self.template = self._template
 
     @requires_role(role=0)
     def post(self, user_id):

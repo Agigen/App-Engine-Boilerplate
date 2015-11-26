@@ -45,7 +45,9 @@ app = application.webapp2.WSGIApplication([
     HandlerPrefixRoute('controllers.admin.', [
         HandlerPrefixRoute('index_controller.', [
             Route('/admin', handler='IndexHandler', name="admin-index", strict_slash=True),
-            Route('/admin/sidebar', handler='SidebarHandler', name="admin-sidebar", strict_slash=True),
+        ]),
+        HandlerPrefixRoute('file_controller.', [
+            Route('/admin/file-upload', handler='UploadHandler', name="admin-file-upload", strict_slash=True),
         ]),
         HandlerPrefixRoute('admin_user_controller.', [
             Route('/admin/admin-users', handler='AdminUsersHandler', name="admin-users-all", strict_slash=True),

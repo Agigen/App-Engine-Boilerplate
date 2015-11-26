@@ -13,9 +13,3 @@ class IndexHandler(application.RequestHandler):
     @requires_role(role=3)
     def get(self):
         self.template = 'admin/index.html'
-
-
-class SidebarHandler(application.RequestHandler):
-    @requires_role(role=3)
-    def get(self):
-        self.template = 'admin/sidebar.html'
