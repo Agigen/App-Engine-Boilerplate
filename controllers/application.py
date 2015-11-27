@@ -69,9 +69,10 @@ class BaseHandler(webapp2.RequestHandler):
         # Get a session store for this request.
         self.session_store = sessions.get_store(request=self.request)
 
-        # Check the simple auth requirements.
-        if config.application.simple_auth.get('enabled'):
-            simple_auth.check_auth(self)
+        # Check the simple auth requirements. Dont check for admin pages.
+        if 'controllers.admin' not in self.__module__:
+            if config.application.simple_auth.get('enabled'):
+                simple_auth.check_auth(self)
 
         try:
             # Dispatch the request.

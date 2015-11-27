@@ -6,6 +6,7 @@ from functools import wraps, partial
 from config import exceptions
 from google.appengine.api import users
 from admin_users.models import AdminUser
+from simple_auth import create_session, SESSION_COOKIE_NAME
 
 
 def requires_role(role=3):
@@ -23,22 +24,25 @@ def requires_role(role=3):
             _is_admin = users.is_current_user_admin()
             if _is_admin:
                 logging.debug('User is app administrator. Allowed.')
-                return rf()
+            else:
+                # Check if user is added to admin users.
+                user = users.get_current_user()
+                if not user:
+                    logging.debug('No google user present. Denied.')
+                    return invalid_auth(request_handler)
 
-            # Check if user is added to admin users.
-            user = users.get_current_user()
-            if not user:
-                logging.debug('No google user present. Denied.')
-                return invalid_auth(request_handler)
+                u = AdminUser.get_by_email(user.email())
+                if not u:
+                    logging.debug('User not present in database. Denied.')
+                    return invalid_auth(request_handler)
 
-            u = AdminUser.get_by_email(user.email())
-            if not u:
-                logging.debug('User not present in database. Denied.')
-                return invalid_auth(request_handler)
+                if u.role > role:
+                    logging.debug('User needs a higher permission level. Denied.')
+                    return invalid_auth(request_handler)
 
-            if u.role > role:
-                logging.debug('User needs a higher permission level. Denied.')
-                return invalid_auth(request_handler)
+            # If user was an admin, also create a simple_auth session if not present.
+            if not request_handler.request.cookies.get(SESSION_COOKIE_NAME):
+                create_session(request_handler)
 
             return rf()
         return decorated_function

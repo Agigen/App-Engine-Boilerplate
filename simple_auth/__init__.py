@@ -14,8 +14,8 @@ import config
 import controllers.application
 
 
-session_cookie_name = 'SIMPLE_AUTH_SSID'
-login_path = '/login'
+SESSION_COOKIE_NAME = 'SIMPLE_AUTH_SSID'
+LOGIN_PATH = '/login'
 
 LIFETIME_SECS = 2592000
 
@@ -57,22 +57,38 @@ def _generate_session_key():
 def check_auth(request_handler, *args, **kwargs):
     _is_local = config.application.simple_auth.get('except_devserver') \
                 and os.environ['SERVER_SOFTWARE'].startswith('Development')
-    ssid = request_handler.request.cookies.get(session_cookie_name, None)
+    ssid = request_handler.request.cookies.get(SESSION_COOKIE_NAME, None)
     if _is_local or ssid and Auth.verify(ssid):
         return True
 
     return request_handler.redirect('%s?%s' % (
-        login_path,
+        LOGIN_PATH,
         urllib.urlencode({'next': request_handler.request.uri})
         ))
 
 
+def create_session(request_handler):
+    ssid = _generate_session_key()
+    a = Auth(
+        id=ssid,
+        ssid=ssid,
+        verified=True
+    )
+    a.put()
+    request_handler.response.set_cookie(SESSION_COOKIE_NAME,
+                                        ssid,
+                                        httponly=True,
+                                        path="/",
+                                        max_age=LIFETIME_SECS)
+
+
 class LoginHandler(webapp2.RequestHandler):
+    """Login request handler"""
+
     @webapp2.cached_property
     def jinja2(self):
         return controllers.application.jinja2.get_jinja2(factory=controllers.application.jinja2_factory, app=self.app)
 
-    """Login request handler"""
     def get(self):
         """Show login page"""
         self.response.out.write(self.jinja2.render_template('simple_auth.html'))
@@ -83,14 +99,8 @@ class LoginHandler(webapp2.RequestHandler):
             self.response.headers['Content-Type'] = 'application/json'
 
         if hashlib.md5(self.request.get('password')).hexdigest() in config.application.simple_auth.get('md5ed_passwords', []):
-            ssid = _generate_session_key()
-            a = Auth(
-                id=ssid,
-                ssid=ssid,
-                verified=True
-            )
-            a.put()
-            self.response.set_cookie(session_cookie_name, ssid, httponly=True, path="/", max_age=LIFETIME_SECS)
+            # Create session and set cookie.
+            create_session(self)
         else:
             if 'X-Requested-With' in self.request.headers:
                 self.response.out.write(json.dumps({
